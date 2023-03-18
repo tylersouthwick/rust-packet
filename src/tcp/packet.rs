@@ -75,6 +75,7 @@ impl<B: AsRef<[u8]>> Packet<B> {
 		}
 
 		if packet.buffer.as_ref().len() < packet.offset() as usize * 4 {
+            println!("buffer len={} offset-len={}", packet.buffer.as_ref().len(), packet.offset() as usize * 4);
 			Err(Error::SmallBuffer)?
 		}
 
