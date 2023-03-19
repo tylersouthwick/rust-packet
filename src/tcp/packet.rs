@@ -71,12 +71,19 @@ impl<B: AsRef<[u8]>> Packet<B> {
 		let packet = Packet::unchecked(buffer);
 
 		if packet.buffer.as_ref().len() < Self::min() {
-			Err(Error::SmallBuffer)?
+			Err(Error::SmallBuffer2 {
+                description: "tcp buffer less than Self::min()".to_string(),
+                expected: Self::min(),
+                actual: packet.buffer.as_ref().len(),
+            })?
 		}
 
 		if packet.buffer.as_ref().len() < packet.offset() as usize * 4 {
-            println!("buffer len={} offset-len={}", packet.buffer.as_ref().len(), packet.offset() as usize * 4);
-			Err(Error::SmallBuffer)?
+			Err(Error::SmallBuffer2 {
+                description: "tcp buffer less than offset".to_string(),
+                expected: packet.offset() as usize * 4,
+                actual: packet.buffer.as_ref().len(),
+            })?
 		}
 
 		Ok(packet)

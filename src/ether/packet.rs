@@ -63,7 +63,11 @@ impl<B: AsRef<[u8]>> Packet<B> {
 		let packet = Packet::unchecked(buffer);
 
 		if packet.buffer.as_ref().len() < Self::min() {
-			Err(Error::SmallBuffer)?
+			Err(Error::SmallBuffer2 {
+                description: "ether packet less than Self::min()".to_string(),
+                expected: Self::min(),
+                actual: packet.buffer.as_ref().len(),
+            })?
 		}
 
 		Ok(packet)

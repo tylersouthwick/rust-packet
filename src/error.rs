@@ -19,6 +19,11 @@ use thiserror::Error;
 pub enum Error {
 	#[error("the buffer is too small")]
 	SmallBuffer,
+	#[error("the buffer is too small: {description} expected {expected}, actual {actual}")]
+	SmallBuffer2{
+        description : String,
+        expected: usize,
+        actual:usize},
 
 	#[error("the packet is invalid")]
 	InvalidPacket,

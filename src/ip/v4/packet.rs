@@ -77,7 +77,11 @@ impl<B: AsRef<[u8]>> Packet<B> {
 		let packet = Packet::unchecked(buffer);
 
 		if packet.buffer.as_ref().len() < Self::min() {
-			Err(Error::SmallBuffer)?
+			Err(Error::SmallBuffer2 {
+                description: "less than Self::min()".to_string(),
+                actual: packet.buffer.as_ref().len(),
+                expected: Self::min(),
+            })?
 		}
 
 		if packet.buffer.as_ref()[0] >> 4 != 4 {
@@ -85,7 +89,11 @@ impl<B: AsRef<[u8]>> Packet<B> {
 		}
 
 		if packet.buffer.as_ref().len() < packet.header() as usize * 4 {
-			Err(Error::SmallBuffer)?
+			Err(Error::SmallBuffer2 {
+                description: "ipv4 buffer less than packet header".to_string(),
+                actual: packet.buffer.as_ref().len(),
+                expected: packet.header() as usize * 4,
+            })?
 		}
 
 		Ok(packet)
@@ -96,7 +104,11 @@ impl<B: AsRef<[u8]>> Packet<B> {
 		let packet = Packet::no_payload(buffer)?;
 
 		if packet.buffer.as_ref().len() < packet.length() as usize {
-			Err(Error::SmallBuffer)?
+			Err(Error::SmallBuffer2 {
+                description: "ipv4 buffer less than the packet length".to_string(),
+                actual: packet.buffer.as_ref().len(),
+                expected: packet.length() as usize,
+            })?
 		}
 
 		Ok(packet)
